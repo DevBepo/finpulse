@@ -1,0 +1,53 @@
+# Environment & secrets (NUNCA commitar!)
+.env
+.env.*
+!.env.example
+
+# Bancos locais e extratos financeiros pessoais
+*.db
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+*.ofx
+*.csv
+*.qif
+*.pdf
+extratos/
+data/
+backups/
+
+# Certificados / chaves
+*.key
+*.crt
+*.pem
+*.p12
+
+# Python / Django
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Node / TypeScript / Frontend
+node_modules/
+dist/
+build/
+.next/
+.vite/
+.turbo/
+npm-debug.log*
+pnpm-debug.log*
+
+# OS & Editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
