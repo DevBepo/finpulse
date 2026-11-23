@@ -1,9 +1,9 @@
 # FinPulse
 
-Gerenciador de finanças pessoais com integração Open Finance (Banco Inter PF via Meu Pluggy).
+Personal finance manager powered by Open Finance (Banco Inter PF via Meu Pluggy).
 
-## Workflow de Desenvolvimento
+## Development Workflow
 
-Este projeto segue **Spec-Driven Development** utilizando as skills do [mattpocock/skills](https://github.com/mattpocock/skills):
+This repository follows **Spec-Driven Development** using [mattpocock/skills](https://github.com/mattpocock/skills):
 
-`grill-with-docs` → `to-spec` → `to-tickets` → `implement-spec` (TDD + subagentes) → `code-review` → `pr` → `retro`
+`grill-with-docs` → `to-spec` → `to-tickets` → `implement-spec` (TDD + subagents) → `code-review` → `pr` → `retro`

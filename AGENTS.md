@@ -1,6 +1,11 @@
 # FinPulse
 
-Gerenciador de finanças pessoais com integração Open Finance (Banco Inter PF via Meu Pluggy).
+Personal finance manager powered by Open Finance (Banco Inter PF via Meu Pluggy).
+
+## Language conventions
+
+- Code, repository docs (`README.md`, `AGENTS.md`, `GLOSSARY.md`, `docs/adr/`), GitHub Issues, and PRs are written in **English**.
+- User-facing UI copy is written in **Brazilian Portuguese (`pt-BR`)**.
 
 ## Agent skills
 
