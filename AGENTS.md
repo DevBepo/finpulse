@@ -1,11 +1,6 @@
 # FinPulse
 
-Personal finance manager powered by Open Finance (Banco Inter PF via Meu Pluggy).
-
-## Language conventions
-
-- Code, repository docs (`README.md`, `AGENTS.md`, `GLOSSARY.md`, `docs/adr/`), GitHub Issues, and PRs are written in **English**.
-- User-facing UI copy is written in **Brazilian Portuguese (`pt-BR`)**.
+Personal finance manager powered by Open Finance (Banco Inter personal accounts via Meu Pluggy).
 
 ## Agent skills
 

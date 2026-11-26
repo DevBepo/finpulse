@@ -1,6 +1,6 @@
 # FinPulse
 
-Personal finance manager powered by Open Finance (Banco Inter PF via Meu Pluggy).
+Personal finance manager powered by Open Finance (Banco Inter personal accounts via Meu Pluggy).
 
 ## Development Workflow
 
