@@ -1,0 +1,73 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #182b25;
+  background: #f1f5f3;
+}
+
+body {
+  margin: 0;
+}
+
+main {
+  max-width: 34rem;
+  margin-inline: auto;
+  padding: clamp(3rem, 10vh, 7rem) 1.25rem;
+}
+
+h1 {
+  margin: 0 0 1.5rem;
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  letter-spacing: -0.055em;
+}
+
+section {
+  padding: clamp(1rem, 4vw, 2rem);
+  border: 1px solid #d6e1db;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 1rem 2.5rem #182b250a;
+}
+
+h2 {
+  margin: 0 0 1rem;
+  font-size: 1.125rem;
+}
+
+dl {
+  margin: 0;
+}
+
+dl > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-block: 0.875rem;
+  border-top: 1px solid #e4ebe7;
+}
+
+dt {
+  font-weight: 600;
+}
+
+dd {
+  margin: 0;
+  padding: 0.25rem 0.625rem;
+  border-radius: 1rem;
+  background: #edf0ef;
+  color: #384841;
+  font-size: 0.875rem;
+}
+
+[data-health="ok"] dd,
+[data-health="unavailable"] .api-status {
+  background: #e2f3e9;
+  color: #175135;
+}
+
+[data-health="unavailable"] .database-status,
+[data-health="unreachable"] .api-status {
+  background: #f8e7dc;
+  color: #813819;
+}
