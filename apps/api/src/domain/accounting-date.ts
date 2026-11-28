@@ -1,9 +1,16 @@
 export const DEFAULT_APP_TIMEZONE = "America/Sao_Paulo";
 
-export function toAccountingDate(
-  occurredAt: Date,
-  timeZone = DEFAULT_APP_TIMEZONE,
-): string {
+export type AccountingDate = string & { readonly __brand: "AccountingDate" };
+
+const MAX_CACHED_FORMATTERS = 32;
+const formatterCache = new Map<string, Intl.DateTimeFormat>();
+
+function getDateFormatter(timeZone: string): Intl.DateTimeFormat {
+  const cached = formatterCache.get(timeZone);
+  if (cached) {
+    return cached;
+  }
+
   const formatter = new Intl.DateTimeFormat("en", {
     calendar: "gregory",
     numberingSystem: "latn",
@@ -13,6 +20,32 @@ export function toAccountingDate(
     month: "2-digit",
     day: "2-digit",
   });
+
+  if (formatterCache.size >= MAX_CACHED_FORMATTERS) {
+    const oldestKey = formatterCache.keys().next().value;
+    if (oldestKey !== undefined) {
+      formatterCache.delete(oldestKey);
+    }
+  }
+  formatterCache.set(timeZone, formatter);
+
+  return formatter;
+}
+
+export function isValidTimeZone(timeZone: string): boolean {
+  try {
+    getDateFormatter(timeZone);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function toAccountingDate(
+  occurredAt: Date,
+  timeZone = DEFAULT_APP_TIMEZONE,
+): AccountingDate {
+  const formatter = getDateFormatter(timeZone);
   const { era, year, month, day } = Object.fromEntries<string>(
     formatter.formatToParts(occurredAt).map(({ type, value }) => [type, value]),
   );
@@ -26,5 +59,5 @@ export function toAccountingDate(
     throw new RangeError("Accounting Date requires a four-digit year");
   }
 
-  return `${String(isoYear).padStart(4, "0")}-${month}-${day}`;
+  return `${String(isoYear).padStart(4, "0")}-${month}-${day}` as AccountingDate;
 }

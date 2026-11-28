@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 
 type HealthState = HealthResponse["status"] | "checking" | "unreachable";
 
+const HEALTH_REQUEST_TIMEOUT_MS = 5_000;
+
 const healthLabels = {
   checking: { api: "Checking…", database: "Checking…" },
   ok: { api: "Online", database: "Connected" },
@@ -18,26 +20,37 @@ export function App() {
   const [health, setHealth] = useState<HealthState>("checking");
 
   useEffect(() => {
+    let active = true;
     const controller = new AbortController();
-    const { signal } = controller;
+    const timeoutId = setTimeout(
+      () => controller.abort(),
+      HEALTH_REQUEST_TIMEOUT_MS,
+    );
 
-    void fetch("/api/health", { signal })
+    void fetch("/api/health", { signal: controller.signal })
       .then(async (response) => {
         const { status } = healthResponseSchema.parse(await response.json());
         if (response.status !== healthStatusCodes[status]) {
           throw new Error("Unexpected health response");
         }
-        if (!signal.aborted) {
+        if (active) {
           setHealth(status);
         }
       })
       .catch(() => {
-        if (!signal.aborted) {
+        if (active) {
           setHealth("unreachable");
         }
+      })
+      .finally(() => {
+        clearTimeout(timeoutId);
       });
 
-    return () => controller.abort();
+    return () => {
+      active = false;
+      clearTimeout(timeoutId);
+      controller.abort();
+    };
   }, []);
 
   const { api, database } = healthLabels[health];

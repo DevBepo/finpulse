@@ -1,9 +1,10 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { App } from "../src/app.js";
 
 afterEach(() => {
   cleanup();
+  vi.useRealTimers();
   vi.unstubAllGlobals();
 });
 
@@ -49,5 +50,28 @@ it("does not show an online status when the HTTP status contradicts the payload"
   render(<App />);
 
   expect(await screen.findByText("Unreachable")).toBeDefined();
+  expect(screen.getByText("Unknown")).toBeDefined();
+});
+
+it("reports an unreachable API when the health request times out", async () => {
+  vi.useFakeTimers();
+  vi.stubGlobal(
+    "fetch",
+    (_url: string, init?: RequestInit) =>
+      new Promise<Response>((_resolve, reject) => {
+        init?.signal?.addEventListener("abort", () => {
+          reject(new DOMException("The operation was aborted.", "AbortError"));
+        });
+      }),
+  );
+
+  render(<App />);
+  expect(screen.getAllByText("Checking…")).toHaveLength(2);
+
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(5_000);
+  });
+
+  expect(screen.getByText("Unreachable")).toBeDefined();
   expect(screen.getByText("Unknown")).toBeDefined();
 });

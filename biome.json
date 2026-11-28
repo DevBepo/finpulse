@@ -1,5 +1,10 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
   "files": {
     "includes": [
       "**",
@@ -11,5 +16,45 @@
   },
   "formatter": {
     "indentStyle": "space"
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["apps/api/src/domain/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": {
+              "level": "error",
+              "options": {
+                "patterns": [
+                  {
+                    "group": [
+                      "fastify",
+                      "fastify/**",
+                      "@fastify/**",
+                      "drizzle-orm",
+                      "drizzle-orm/**",
+                      "postgres",
+                      "postgres/**",
+                      "pluggy-sdk",
+                      "pluggy-sdk/**",
+                      "zod",
+                      "zod/**",
+                      "@finpulse/contracts",
+                      "@finpulse/contracts/**",
+                      "**/adapters/**",
+                      "**/app.js",
+                      "**/config.js",
+                      "**/main.js"
+                    ],
+                    "message": "Domain modules in apps/api/src/domain/ must remain pure and cannot import adapters, HTTP/DB/Pluggy frameworks, or app config."
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

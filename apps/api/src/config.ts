@@ -1,18 +1,21 @@
 import { z } from "zod";
-import { DEFAULT_APP_TIMEZONE } from "./domain/accounting-date.js";
+import {
+  DEFAULT_APP_TIMEZONE,
+  isValidTimeZone,
+} from "./domain/accounting-date.js";
+
+const databaseNamePattern = /^\/[^/\s]+$/;
 
 const envSchema = z.object({
-  DATABASE_URL: z.url({ protocol: /^postgres(?:ql)?$/, hostname: /.+/ }),
+  DATABASE_URL: z
+    .url({ protocol: /^postgres(?:ql)?$/, hostname: /.+/ })
+    .refine((url) => {
+      const parsed = URL.parse(url);
+      return parsed === null || databaseNamePattern.test(parsed.pathname);
+    }, "Expected a database name in DATABASE_URL"),
   APP_TIMEZONE: z
     .string()
-    .refine((timeZone) => {
-      try {
-        new Intl.DateTimeFormat("en", { timeZone });
-        return true;
-      } catch {
-        return false;
-      }
-    }, "Expected a valid timezone")
+    .refine(isValidTimeZone, "Expected a valid timezone")
     .default(DEFAULT_APP_TIMEZONE),
   API_PORT: z
     .string()
